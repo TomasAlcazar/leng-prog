@@ -243,7 +243,7 @@ let second = &v[1];
 
 // Using slices
 let last2 = &v[v.len()-2..];
-println!("All: {v:?}, first = {first}, second = {second}, last2 = {last2:?}")
+println!("All: {v:?}, first = {first}, second = {second}, last2 = {last2:?}")l
 ```
 <div data-marpit-fragment>
 

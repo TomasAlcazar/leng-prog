@@ -26,15 +26,16 @@ static void bad2(void) {
         p[i] = 'A';
 
     free(p);
-} 
-// Si el malloc está vacío y no me choco con ningún espacio reservado se puede escribir en el heap 
+    // Si el malloc está vacío y no me choco con ningún espacio reservado se puede escribir en el heap 
 // Puedo usar malloc_size para solucionarlo
 // Bloque de memoria que depende de la arquitectura
+} 
 
 static void bad3(void) {
     char s[4] = "abc";
     s[3] = 'x'; // overwrites '\0'
     puts(s);    // UB
+    // puts no encuentra el /0 por lo tanto el comportamiento es indefinido
 }
 
 static void bad4(void) {
@@ -47,7 +48,7 @@ static void bad4(void) {
 
 static void bad5(void) {
     int len = -5;
-    char *p = (char*)malloc(len);
+    char *p = (char*)malloc(len); // malloc recibe size_t que es unsigned por lo tanto len se convierte en un número muy grande
     if (!p) { perror("malloc"); return; }
     free(p);
 }
@@ -58,6 +59,7 @@ static void bad6(void) {
     *p = 7;
     free(p);
     *p = 42; // UAF write
+    // p queda dangling y se está escribiendo en memoria que ya fue liberada
 }
 
 static void bad7(void) {
@@ -111,7 +113,8 @@ static void bad12(void) {
 static void bad13(void) {
     char *p = (char*)malloc(10);
     if (!p) { perror("malloc"); return; }
-    p = (char*)realloc(p, SIZE_MAX/4);
+    p = (char*)realloc(p, SIZE_MAX/4); // Si el realloc falla perdes a la variable p
+    // Memory leak
     if (!p) {
         puts("realloc failed");
         return;

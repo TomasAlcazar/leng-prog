@@ -15,7 +15,7 @@ fn main() {
     println!("El valor de x es {} y el valor de y es {}.", x, y);
 }
 ```
-Los valores i32 implementan el copy, así que x y y siguen siendo válidos.
+Los valores i32 implementan el copy, así que x e y siguen siendo válidos.
 
 ```rust
 // Programa 2
@@ -167,6 +167,8 @@ fn main() {
    let t = (String::from("Anton"), String::from("Webern"));
    let _s = t.0;
    println!("{:?}", t.1); // Modifique sólo esta línea. No use '_s'
+   println!("{:?}", (&t.0, &t.1));
+
 }
 ```
 let _s = t.0; mueve el String y ya no se puede usar la tupla completa pero al mover t.0 solo queda usable t.1, por eso el programa compila.
@@ -176,7 +178,7 @@ let _s = t.0; mueve el String y ya no se puede usar la tupla completa pero al mo
 // Programa 12
 fn main() {
    let t = (String::from("Alban"), String::from("Berg"));
-   let (__, __) = __; // Reemplace los underscores en esta línea. 
+   let (s1, s2) = (&t.0, &t.2); // Reemplace los underscores en esta línea. 
    println!("{:?}, {:?}, {:?}", s1, s2, t); // Queremos la salida -> "Alban", "Berg", ("Alban", "Berg")
 }
 ```
@@ -205,7 +207,12 @@ y es una referencia (&i32), o sea apunta a x pero no es el valor mismo pero si u
 15. Escriba una función que reciba dos parámetros de tipo _&String_ y devuelva el más largo de ambos. El esquema es el siguiente:
 ```
 // Programa 9 (aún inconcluso)
-fn longer(s1: *String, s2: *String) -> *String {
-    // Aquí viene su código; podría ser necesario cambiar algo arriba
+fn longer<'a>(s1: &'a String, s2: &'a String) -> &'a String {
+    if s1.len() >= s2.len() {
+        s1
+    } else {
+        s2
+    }
 }
+
 ```
